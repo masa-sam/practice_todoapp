@@ -9,7 +9,8 @@ export function middleware(req) {
 
   if (basicAuth) {
     const authValue = basicAuth.split(' ')[1];
-    const [user, pwd] = atob(authValue).split(':');
+    // Edge Runtimeではatobの代わりにBufferを使用
+    const [user, pwd] = Buffer.from(authValue, 'base64').toString().split(':');
 
     if (user === 'todo' && pwd === 'password123') {
       return NextResponse.next();
